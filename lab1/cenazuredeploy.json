@@ -3,22 +3,36 @@
     "contentVersion": "1.0.0.0",
     "parameters": {"storageAccount": {
        "type": "string",
+       "name": "chidistorage2",
        "metadata": {
-            "description": ""
+            "description": "Storage Account Name - must be unique"
         }
-    }},
+    },
+    "accountType": {
+        "type": "string",
+        "defaultValue": "Standard_LRS",
+        "allowedValues": [ 
+            "Standard_LRS",
+            " Premium_LRS",
+            "Standard_RAGRS"
+        ],
+        "metadata": {
+            "description": "SKU Type"
+        }
+    }
+},
     "variables": {},
     "resources": [
         {
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2015-06-15",
-            "name": "chidistorage2",
+            "name": "[parameters('storageAccount')]",
             "location": "[resourceGroup().location]",
             "tags": {
                 "displayName": "ChidiLab"
             },
             "properties": {
-                "accountType": "Standard_LRS"
+                "accountType": "[parameters('accountType')]"
             }
         }
     ],
