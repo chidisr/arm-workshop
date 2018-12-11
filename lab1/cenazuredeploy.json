@@ -1,27 +1,31 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
-    "parameters": {"storageAccount": {
-       "type": "string",
-       "name": "chidistorage2",
-       "metadata": {
-            "description": "Storage Account Name - must be unique"
+    "parameters": {
+        "storageAccount": {
+            "type": "string",
+            "defaultValue": "chidilab1",
+            "maxLength": 24,
+            "metadata": {
+                "description": "Storage Account Name - must be unique"
+            }
+        },
+        "accountType": {
+            "type": "string",
+            "defaultValue": "Standard_LRS",
+            "allowedValues": [
+                "Standard_LRS",
+                " Premium_LRS",
+                "Standard_RAGRS"
+            ],
+            "metadata": {
+                "description": "SKU Type"
+            }
         }
     },
-    "accountType": {
-        "type": "string",
-        "defaultValue": "Standard_LRS",
-        "allowedValues": [ 
-            "Standard_LRS",
-            " Premium_LRS",
-            "Standard_RAGRS"
-        ],
-        "metadata": {
-            "description": "SKU Type"
-        }
-    }
-},
-    "variables": {},
+    "variables": {
+        "storageAccount": "[toLower(concat(parameters('storageAccountPrefix'), uniqueString( resourceGroup().id )))]"
+    },
     "resources": [
         {
             "type": "Microsoft.Storage/storageAccounts",
@@ -36,5 +40,9 @@
             }
         }
     ],
-    "outputs": {}
+    "outputs": {
+        "storageAccount": {
+            "type": "string",
+            "value": "[variables('storageAccount')]"
+    }
 }
